@@ -1,0 +1,2 @@
+# omanix
+Environment configuration scripts.
