@@ -1,8 +1,13 @@
 {
-  description = "Disko layout: simple ext4 root + ESP";
+  description = "omanix destructive single-disk ext4 disko config";
 
-  outputs = { self, ... }: {
-    # This name after the '#' in --flake (e.g. #simple-ext4)
-    diskoConfigurations.single-ext4-destructive = import ./single-ext4-destructive.nix;
+  inputs = {
+    disko.url = "github:nix-community/disko";
+  };
+
+  outputs = { self, disko, ... }: {
+    diskoConfigurations = {
+      "single-disk-ext4-destructive" = import ./single-disk-ext4-destructive.nix;
+    };
   };
 }
