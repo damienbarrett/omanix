@@ -1,5 +1,5 @@
 sudo nix --extra-experimental-features 'nix-command flakes' \
-  run github:nix-community/disko#master -- \
+  run github:nix-community/disko -- \
   --mode destroy,format,mount \
-  --flake github:damienbarrett/omanix#single-disk-ext4-destructive \
+  --flake 'github:damienbarrett/omanix#diskoConfigurations.single-disk-ext4-destructive' \
   --argstr device /dev/nvme0n1
