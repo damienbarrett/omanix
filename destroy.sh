@@ -4,3 +4,12 @@ cp ~/omanix/hosts/vmnix/scripts/single-disk-ext4-destructive/single-disk-ext4-de
 sudo /tmp/disk-config.sh
 sudo nixos-generate-config --root /mnt
 sudo nixos-install
+echo Next Steps
+echo ========== 
+echo Open /etc/nixos/configuration.nix
+echo - Enable sshd
+echo - Add vim and wget
+echo - Add alice
+echo Set a password for alice
+echo - passwd alice
+echo sudo reboot
