@@ -3,5 +3,3 @@ cp ~/omanix/hosts/vmnix/scripts/single-disk-ext4-destructive/single-disk-ext4-de
 cp ~/omanix/hosts/vmnix/scripts/single-disk-ext4-destructive/single-disk-ext4-destructive.nix /tmp/disk-config.nix
 sudo /tmp/disk-config.sh
 sudo nixos-generate-config --root /mnt && nixos-install
-
-echo ensure root password is set and then reboot
