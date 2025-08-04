@@ -4,4 +4,4 @@ cp /tmp/omanix/hosts/vmnix/scripts/single-disk-ext4-destructive/single-disk-ext4
 cp /tmp/omanix/hosts/vmnix/scripts/single-disk-ext4-destructive/single-disk-ext4-destructive.nix /tmp/disk-config.nix
 sudo /tmp/disk-config.sh
 sudo nixos-generate-config --root /mnt 
-# sudo nixos-install
+sudo nixos-install
