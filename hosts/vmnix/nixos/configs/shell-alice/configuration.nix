@@ -69,8 +69,11 @@
      wget
 
 	# Shell packages
+	git
+	gh
     lazygit
     neovim
+	yazi
     zoxide
    ];
 
