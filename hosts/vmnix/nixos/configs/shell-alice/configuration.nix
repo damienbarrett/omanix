@@ -67,6 +67,11 @@
    environment.systemPackages = with pkgs; [
      vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
      wget
+
+	# Shell packages
+    lazygit
+    neovim
+    zoxide
    ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -125,9 +130,4 @@
   users.users.nixos.extraGroups = [ "wheel" ]; 
   users.users.nixos.packages = with pkgs; [ tree ];
 
-  environment.systemPackages = with pkgs; [
-    lazygit
-    neovim
-    zoxide
-  ];
 }
