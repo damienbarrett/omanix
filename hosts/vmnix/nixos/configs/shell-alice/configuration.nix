@@ -69,11 +69,29 @@
      wget
 
 	# Shell packages
-	git
-	gh
+    bash-completion
+    bat
+    btop
+    curl
+    eza
+    fastfetch
+    fd
+    fzf
+    git
+    gh
+    inetutils
+    less
+    jq
     lazygit
+    man
+    nushell
+    plocate
+    ripgrep
     neovim
-	yazi
+    tldr
+    unzip
+    whois
+    yazi
     zoxide
    ];
 
