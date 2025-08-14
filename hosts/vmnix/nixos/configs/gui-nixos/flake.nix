@@ -9,7 +9,7 @@
     home-manager.url = "github:nix-community/home-manager/release-25.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    # NixVim (module for HM/NixOS)
+    # NixVim (module for Home-Manager/NixOS)
     nixvim.url = "github:nix-community/nixvim";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -19,16 +19,16 @@
       system = "aarch64-linux"; # change to "x86_64-linux" if needed
 
       modules = [
-        # System config (imports hardware-configuration.nix inside)
+        # Your system config (this file imports hardware-configuration.nix itself)
         ./configuration.nix
 
         # Wire Home Manager as a NixOS module (flake-native)
         home-manager.nixosModules.home-manager
 
-        # Make the NixVim HM options (programs.nixvim) available
+        # Make the NixVim Home-Manager options (programs.nixvim) available
         nixvim.homeModules.nixvim
 
-        # Common HM defaults
+        # Common Home-Manager defaults
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
