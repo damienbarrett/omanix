@@ -1,7 +1,12 @@
 { config, lib, pkgs, ... }:
 
 let # home-manager
-  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/refs/heads/release-25.05.tar.gz";  # Pin Home Manager to the 25.05 release branch # home-manager
+  home-manager = builtins.fetchTarball {
+    url = "https://github.com/nix-community/home-manager/archive/refs/heads/release-25.05.tar.gz";
+    sha256 = "sha256-oV695RvbAE4+R9pcsT9shmp6zE/+IZe6evHWX63f2Qg=";
+  };
+
+
 in # home-manager
 {
   imports =
@@ -133,6 +138,5 @@ in # home-manager
   # Optional: make HM reuse the same nixpkgs as the system and install into the user profile.
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
-
 
 }
