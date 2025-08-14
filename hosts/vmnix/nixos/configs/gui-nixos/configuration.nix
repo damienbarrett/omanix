@@ -119,6 +119,22 @@
       neovim
     ];
 
+    programs.nixvim = {
+      enable = true;
+      plugins.oil.enable = true;
+      plugins.harpoon.enable = true;
+      plugins.harpoon.settings = { save_on_toggle = true; };
+      extraPlugins = [ pkgs.vimPlugins.nvim-web-devicons ]; # for oil icons
+      keymaps = [
+        { mode = "n"; key = "-"; action = "<cmd>Oil<cr>"; options.desc = "Oil: parent dir"; }
+        { mode = "n"; key = "<leader>ha";
+          lua = "require('harpoon.mark').add_file()"; options.desc = "Harpoon: add file"; }
+        { mode = "n"; key = "<leader>hm";
+          lua = "require('harpoon.ui').toggle_quick_menu()"; options.desc = "Harpoon: menu"; }
+      ];
+
+	};
+
     programs.bash.enable = true;   # or programs.zsh.enable = true;
     programs.git.enable  = true;
   };
