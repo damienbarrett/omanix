@@ -1,4 +1,4 @@
- { config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   ########################################
@@ -6,9 +6,6 @@
   ########################################
   imports = [
     ./hardware-configuration.nix
-    # NOTE: Home Manager is wired in via flake.nix:
-    #   home-manager.nixosModules.home-manager
-    #   nixvim.homeModules.nixvim
   ];
 
   ########################################
@@ -58,29 +55,34 @@
 
   ########################################
   # Home Manager (user-scoped config)
-  # - HM module provided by flake inputs
-  # - NixVim configured via nixvim.homeModules.nixvim (from flake)
   ########################################
   home-manager.users.nixos = { pkgs, ... }: {
     home.username = "nixos";
     home.homeDirectory = "/home/nixos";
-    home.stateVersion = "25.05"; # keep once set; controls HM defaults
+    home.stateVersion = "25.05"; # HM’s own compatibility knob. Keep once set.  [oai_citation:5‡GitHub](https://github.com/nix-community/home-manager/issues/5794?utm_source=chatgpt.com)
 
-    # NixVim (plugins configured declaratively)
+    # If you keep extra HM modules, import them here (NOT at system level):
+    imports = [
+      ./wrappers/hm.nix
+    ];
+
+    # NixVim configured declaratively (Oil + Harpoon)
     programs.nixvim = {
       enable = true;
 
-      # Plugins via NixVim modules
-      plugins.oil.enable = true;       # stevearc/oil.nvim
-      plugins.harpoon.enable = true;   # ThePrimeagen/harpoon
+      plugins.oil.enable = true;        # stevearc/oil.nvim
+      plugins.harpoon.enable = true;    # ThePrimeagen/harpoon (defaults to v2)
+
+      # Your keymaps use Harpoon v1 APIs; pin v1 to match:
+      plugins.harpoon.package = pkgs.vimPlugins.harpoon;
 
       # Dependencies / UX niceties
       extraPlugins = [
-        pkgs.vimPlugins.plenary-nvim        # required by harpoon
-        pkgs.vimPlugins.nvim-web-devicons   # optional icons for oil
+        pkgs.vimPlugins.plenary-nvim        # required by Harpoon v1
+        pkgs.vimPlugins.nvim-web-devicons   # optional icons for Oil
       ];
 
-      # Handy keymaps (Oil & Harpoon)
+      # Handy keymaps (Oil & Harpoon v1)
       keymaps = [
         { mode = "n"; key = "-";            action = "<cmd>Oil<cr>";                                   options.desc = "Oil: parent dir"; }
         { mode = "n"; key = "<leader>ha";   lua = "require('harpoon.mark').add_file()";               options.desc = "Harpoon add file"; }
@@ -100,5 +102,5 @@
   ########################################
   # State version pins
   ########################################
-  system.stateVersion = "25.05"; # pin once at install
+  system.stateVersion = "25.05"; # NixOS compatibility anchor. Keep once set. (Separate from HM’s.)  [oai_citation:6‡nixos.wiki](https://nixos.wiki/wiki/Home_Manager?utm_source=chatgpt.com)
 }
