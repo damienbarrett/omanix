@@ -59,9 +59,9 @@
   home-manager.users.nixos = { pkgs, ... }: {
     home.username = "nixos";
     home.homeDirectory = "/home/nixos";
-    home.stateVersion = "25.05"; # HM’s own compatibility knob. Keep once set.  [oai_citation:5‡GitHub](https://github.com/nix-community/home-manager/issues/5794?utm_source=chatgpt.com)
+    home.stateVersion = "25.05"; # HM’s own compatibility knob
 
-    # If you keep extra HM modules, import them here (NOT at system level):
+    # Put Home-Manager modules here (never at system level)
     imports = [
       ./wrappers/hm.nix
     ];
@@ -70,10 +70,11 @@
     programs.nixvim = {
       enable = true;
 
+      # Plugin modules
       plugins.oil.enable = true;        # stevearc/oil.nvim
-      plugins.harpoon.enable = true;    # ThePrimeagen/harpoon (defaults to v2)
+      plugins.harpoon.enable = true;    # ThePrimeagen/harpoon
 
-      # Your keymaps use Harpoon v1 APIs; pin v1 to match:
+      # Your keymaps use Harpoon v1 APIs; pin v1 to match
       plugins.harpoon.package = pkgs.vimPlugins.harpoon;
 
       # Dependencies / UX niceties
@@ -102,5 +103,5 @@
   ########################################
   # State version pins
   ########################################
-  system.stateVersion = "25.05"; # NixOS compatibility anchor. Keep once set. (Separate from HM’s.)  [oai_citation:6‡nixos.wiki](https://nixos.wiki/wiki/Home_Manager?utm_source=chatgpt.com)
+  system.stateVersion = "25.05"; # NixOS compatibility anchor (separate from HM’s)
 }

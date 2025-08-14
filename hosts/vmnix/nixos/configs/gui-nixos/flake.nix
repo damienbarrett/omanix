@@ -5,7 +5,7 @@
     # Pin nixpkgs to the NixOS 25.05 channel
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
 
-    # Home Manager (tracks same nixpkgs)
+    # Home Manager, tracking the same nixpkgs
     home-manager.url = "github:nix-community/home-manager/release-25.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -17,16 +17,18 @@
   outputs = { self, nixpkgs, home-manager, nixvim, ... }: {
     nixosConfigurations.vmnixos = nixpkgs.lib.nixosSystem {
       system = "aarch64-linux"; # change to "x86_64-linux" if needed
+
       modules = [
+        # Your system config (imports hardware-configuration.nix itself)
         ./configuration.nix
 
-        # Enable Home Manager as a NixOS module
+        # Wire Home Manager as a NixOS module (flake-native)
         home-manager.nixosModules.home-manager
 
-        # Make programs.nixvim available inside Home Manager
+        # Make the NixVim Home-Manager options (programs.nixvim) available
         nixvim.homeModules.nixvim
 
-        # Common HM defaults
+        # Common Home-Manager defaults
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
