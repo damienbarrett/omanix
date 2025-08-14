@@ -1,18 +1,12 @@
 { config, lib, pkgs, ... }:
 
-let # home-manager
-  home-manager = builtins.fetchTarball {
-    url = "https://github.com/nix-community/home-manager/archive/refs/heads/release-25.05.tar.gz";
-    sha256 = "sha256-oV695RvbAE4+R9pcsT9shmp6zE/+IZe6evHWX63f2Qg=";
-  };
-
-
-in # home-manager
 {
   imports =
     [
       ./hardware-configuration.nix
-      (import "${home-manager}/nixos") # home-manager
+      # >>> CHANGED: Home Manager comes from flake input in flake.nix:
+      # >>> CHANGED:   home-manager.nixosModules.home-manager
+      # >>> CHANGED: No tarball fetch/import here.
     ];
 
   boot.loader.systemd-boot.enable = true;
@@ -50,23 +44,20 @@ in # home-manager
   # services.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-   #users.users.nixos = {
-     #isNormalUser = true;
-     #extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-     #packages = with pkgs; [
-       #tree
-     #];
-   #};
+  # users.users.nixos = {
+  #   isNormalUser = true;
+  #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+  #   packages = with pkgs; [ tree ];
+  # };
 
   # programs.firefox.enable = true;
 
   # List packages installed in system profile.
-  # You can use https://search.nixos.org/ to find more packages (and options).
-   environment.systemPackages = with pkgs; [
-     vim
-     wget
+  environment.systemPackages = with pkgs; [
+    vim
+    wget
 
-	# Shell packages
+    # Shell packages
     bash-completion
     bat
     btop
@@ -91,19 +82,17 @@ in # home-manager
     whois
     yazi
     zoxide
-   ];
+  ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
+  # Some programs need SUID wrappers, can be configured further or are started in user sessions.
   # programs.mtr.enable = true;
-   programs.gnupg.agent = {
-     enable = true;
-     enableSSHSupport = true;
-   };
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
 
   # List services that you want to enable:
-
-   services.openssh.enable = true; # Enable the OpenSSH daemon.
+  services.openssh.enable = true; # Enable the OpenSSH daemon.
 
   system.stateVersion = "25.05"; # Do not change, even when upgrading
 
@@ -113,11 +102,10 @@ in # home-manager
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Configuration
-
   time.timeZone = "Europe/Amsterdam";
 
   users.users.nixos.isNormalUser = true;
-  users.users.nixos.extraGroups = [ "wheel" ]; 
+  users.users.nixos.extraGroups = [ "wheel" ];
   users.users.nixos.packages = with pkgs; [ tree ];
 
   # Home Manager for user "nixos"
@@ -138,5 +126,4 @@ in # home-manager
   # Optional: make HM reuse the same nixpkgs as the system and install into the user profile.
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
-
 }
