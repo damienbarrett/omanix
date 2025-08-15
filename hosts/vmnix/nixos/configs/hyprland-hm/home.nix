@@ -32,6 +32,10 @@
 	whois
 	yazi
 	zoxide
+
+    # hyprland packages
+    wl-clipboard grim slurp swaybg
+    xdg-utils
   ];
 
 
@@ -86,9 +90,4 @@
   # Polkit agent (so auth prompts appear on Hyprland)
   services.lxqt-policykit-agent.enable = true;
 
-  # Handy Wayland tools
-  home.packages = with pkgs; [
-    wl-clipboard grim slurp swaybg
-    xdg-utils
-  ];
 }
