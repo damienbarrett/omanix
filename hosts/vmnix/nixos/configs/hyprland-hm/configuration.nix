@@ -144,6 +144,12 @@
   };
 
   # Fonts so Waybar icons look right
-  fonts.packages = with pkgs; [ font-awesome nerdfonts ];
+  # fonts.packages = with pkgs; [ font-awesome nerdfonts ];
+  # Fonts so Waybar icons look right
+  fonts.packages = with pkgs; [
+    font-awesome
+    nerd-fonts.jetbrains-mono
+    # or: nerd-fonts.fira-code, nerd-fonts.droid-sans-mono, etc.
+  ];
 }
 
