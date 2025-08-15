@@ -112,14 +112,15 @@
   # Hyprland system integration (session file, polkit, xdp, xwayland, etc.)
   programs.hyprland.enable = true;  # required system-level piece
 
-  # Simple text TUI login (replace with SDDM/GDM if you prefer)
   services.greetd = {
     enable = true;
     settings.default_session = {
-      command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
-      user = "greeter";
+      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
+      user = "nixos"; # your user
     };
   };
+
+
 
   # XDG portals (screensharing, file pickers) for Hyprland
   xdg.portal = {
