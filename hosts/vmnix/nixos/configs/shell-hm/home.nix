@@ -1,0 +1,36 @@
+# home.nix
+{ config, pkgs, ... }:
+
+{
+  # Minimum required by Home Manager:
+  home.username = "nixos";
+  home.homeDirectory = "/home/nixos";
+  home.stateVersion = "25.05";  # pick the version you first start with; don't bump casually
+
+  home.packages = with pkgs; [
+    bash-completion
+	bat
+	btop
+	curl
+	eza
+	fastfetch
+	fd
+	fzf
+	git
+	gh
+	inetutils
+	less
+	jq
+	lazygit
+	man
+	nushell
+	plocate
+	ripgrep
+	neovim
+	tldr
+	unzip
+	whois
+	yazi
+	zoxide
+  ];
+}
