@@ -6,29 +6,14 @@
   home.homeDirectory = "/home/nixos";
   home.stateVersion = "25.05";
 
-  # fonts for icons (Waybar, etc.)
-  fonts.fontconfig.enable = true;
-
   home.packages = with pkgs; [
-    # CLI basics
     bash-completion bat btop curl eza fastfetch fd fzf git gh inetutils less jq
     lazygit man nushell plocate ripgrep neovim tldr unzip whois yazi zoxide
 
-    # Wayland/Hyprland helpers
     wl-clipboard grim slurp swaybg xdg-utils
-
-    # terminals + Xwayland for X11 apps
-    foot xterm xwayland
-
-    # icon fonts (optional but nice)
-    font-awesome nerd-fonts.symbols-only
+    foot xterm  # backup terms
+    xwayland
   ];
-
-  # Apps used by binds/desktop
-  programs.wofi.enable = true;
-  programs.ghostty.enable = true;
-  services.mako.enable = true;
-  services.lxqt-policykit-agent.enable = true;
 
   # Hyprland via Home Manager
   wayland.windowManager.hyprland = {
@@ -37,7 +22,9 @@
       "$mod" = "SUPER";
       monitor = ",preferred,auto,1";
 
+      # Start essentials once + a guaranteed terminal
       exec-once = [
+        "xterm -geometry 100x30+40+40"  # <-- opens at login so you always have a shell
         "waybar"
         "lxqt-policykit-agent"
         "mako"
@@ -45,15 +32,8 @@
       ];
 
       bind = [
-        # Main terminal (Ghostty via X11 + non-GL renderer for VM stability)
-        "$mod, Return, exec, env -u GDK_DEBUG GDK_BACKEND=x11 GSK_RENDERER=cairo ghostty"
-
-        # Backups
-        "$mod SHIFT, Return, exec, foot"
-        ", F12, exec, xterm"
-        ", F10, exec, wofi --show drun"
-
-        # Other handy binds
+        "$mod, Return, exec, ghostty"   # or kitty/foot if you prefer
+        ", F12, exec, xterm"            # rescue: no modifiers
         "$mod, D, exec, wofi --show drun"
         "$mod, Q, killactive,"
         "$mod SHIFT, E, exit,"
@@ -62,7 +42,7 @@
     };
   };
 
-  # Waybar with a clickable "Menu" button
+  # Waybar with a visible, clickable "Menu" button
   programs.waybar = {
     enable = true;
     settings = [{
@@ -73,7 +53,7 @@
       modules-right = [ "pulseaudio" "network" "cpu" "memory" "battery" ];
 
       "custom/menu" = {
-        "format" = "Menu";               # swap to an icon later if you want
+        "format" = "Menu";               # switch to an icon later if you want
         "tooltip" = false;
         "on-click" = "wofi --show drun";
         "on-click-right" = "wofi --show run";
@@ -84,12 +64,12 @@
     '';
   };
 
-  # Optional launcher entry so Wofi shows an explicit X11 Ghostty
-  xdg.enable = true;
-  xdg.desktopEntries."ghostty-x11" = {
-    name = "Ghostty (X11 fallback)";
-    exec = "env -u GDK_DEBUG GDK_BACKEND=x11 GSK_RENDERER=cairo ghostty";
-    terminal = false;
-    categories = [ "System" "TerminalEmulator" ];
-  };
+  # Apps used by binds
+  programs.wofi.enable = true;
+  programs.ghostty.enable = true;
+  services.mako.enable = true;
+  services.lxqt-policykit-agent.enable = true;
+
+  # If you also want kitty, add:
+  # programs.kitty.enable = true;
 }
