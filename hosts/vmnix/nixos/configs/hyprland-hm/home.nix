@@ -10,9 +10,8 @@
     bash-completion bat btop curl eza fastfetch fd fzf git gh inetutils less jq
     lazygit man nushell plocate ripgrep neovim tldr unzip whois yazi zoxide
 
-    # Wayland/Hyprland helpers + backup terminals
     wl-clipboard grim slurp swaybg xdg-utils
-    foot xterm
+    foot xterm  # backup terms
   ];
 
   # Hyprland via Home Manager
@@ -22,7 +21,9 @@
       "$mod" = "SUPER";
       monitor = ",preferred,auto,1";
 
+      # Start essentials once + a guaranteed terminal
       exec-once = [
+        "xterm -geometry 100x30+40+40"  # <-- opens at login so you always have a shell
         "waybar"
         "lxqt-policykit-agent"
         "mako"
@@ -30,8 +31,8 @@
       ];
 
       bind = [
-        "$mod, Return, exec, ghostty"   # main terminal
-        ", F12, exec, xterm"            # rescue terminal (no modifiers)
+        "$mod, Return, exec, ghostty"   # or kitty/foot if you prefer
+        ", F12, exec, xterm"            # rescue: no modifiers
         "$mod, D, exec, wofi --show drun"
         "$mod, Q, killactive,"
         "$mod SHIFT, E, exit,"
@@ -40,7 +41,7 @@
     };
   };
 
-  # Waybar with a clickable "Menu" button
+  # Waybar with a visible, clickable "Menu" button
   programs.waybar = {
     enable = true;
     settings = [{
@@ -51,9 +52,9 @@
       modules-right = [ "pulseaudio" "network" "cpu" "memory" "battery" ];
 
       "custom/menu" = {
-        "format" = "Menu";               # change to an icon later if you want
+        "format" = "Menu";               # switch to an icon later if you want
         "tooltip" = false;
-        "on-click" = "wofi --show drun"; # mouse-friendly app launcher
+        "on-click" = "wofi --show drun";
         "on-click-right" = "wofi --show run";
       };
     }];
@@ -68,6 +69,6 @@
   services.mako.enable = true;
   services.lxqt-policykit-agent.enable = true;
 
-  # (Optional) If you still want fuzzel, uncomment:
-  # programs.fuzzel.enable = true;
+  # If you also want kitty, add:
+  # programs.kitty.enable = true;
 }
