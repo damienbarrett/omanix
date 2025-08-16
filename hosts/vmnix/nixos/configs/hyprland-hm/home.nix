@@ -2,107 +2,72 @@
 { config, pkgs, ... }:
 
 {
-  # Minimum required by Home Manager:
   home.username = "nixos";
   home.homeDirectory = "/home/nixos";
-  home.stateVersion = "25.05";  # pick the version you first start with; don't bump casually
+  home.stateVersion = "25.05";
 
   home.packages = with pkgs; [
-    bash-completion
-	bat
-	btop
-	curl
-	eza
-	fastfetch
-	fd
-	fzf
-	git
-	gh
-	inetutils
-	less
-	jq
-	lazygit
-	man
-	nushell
-	plocate
-	ripgrep
-	neovim
-	tldr
-	unzip
-	whois
-	yazi
-	zoxide
+    bash-completion bat btop curl eza fastfetch fd fzf git gh inetutils less jq
+    lazygit man nushell plocate ripgrep neovim tldr unzip whois yazi zoxide
 
-    # hyprland packages
-    wl-clipboard grim slurp swaybg
-    xdg-utils
-    foot xterm # backup
+    # Wayland/Hyprland helpers + backup terminals
+    wl-clipboard grim slurp swaybg xdg-utils
+    foot xterm
   ];
 
-  # apps those binds call
-  # programs.waybar.enable = true;
-  programs.fuzzel.enable = true;            # simple Wayland launcher
-  # programs.kitty.enable = true;
-  programs.ghostty.enable = true;
-
-
-  #Hyprland via HM (actual compositor config)
+  # Hyprland via Home Manager
   wayland.windowManager.hyprland = {
     enable = true;
-    # systemd target is on by default; keep it (it exports env vars to user services)
-    # wayland.windowManager.hyprland.systemd.enable = true;
-
     settings = {
       "$mod" = "SUPER";
       monitor = ",preferred,auto,1";
 
-      # Start essentials once
       exec-once = [
         "waybar"
-        "lxqt-policykit-agent"  # polkit GUI
-        "mako"                  # notifications
+        "lxqt-policykit-agent"
+        "mako"
         "swaybg -i /run/current-system/sw/share/backgrounds/nixos/nix-wallpaper-simple-blue.png"
       ];
 
       bind = [
-        "$mod, Return, exec, kitty"
-        # ", F12, exec, kitty"            # keep the no-mod fallback
+        "$mod, Return, exec, ghostty"   # main terminal
+        ", F12, exec, xterm"            # rescue terminal (no modifiers)
         "$mod, D, exec, wofi --show drun"
         "$mod, Q, killactive,"
         "$mod SHIFT, E, exit,"
         "$mod, F, fullscreen,"
-        # "$mod, Return, exec, foot"
-        ", F12, exec, xterm"    # rescue fallback
       ];
     };
   };
 
-  # Bar
+  # Waybar with a clickable "Menu" button
   programs.waybar = {
     enable = true;
-    # super-minimal bar
     settings = [{
       layer = "top";
       position = "top";
-      modules-left = [ "hyprland/workspaces" ];
+      modules-left = [ "custom/menu" "hyprland/workspaces" ];
       modules-center = [ "clock" ];
       modules-right = [ "pulseaudio" "network" "cpu" "memory" "battery" ];
-      # The "start button"
+
       "custom/menu" = {
-        "format" = "";                 # any icon/text (needs a nerd/FA icon)
+        "format" = "Menu";               # change to an icon later if you want
         "tooltip" = false;
-        "on-click" = "wofi --show drun"; # app launcher (mouse friendly)
-        "on-click-right" = "wofi --show run"; # optional: "run" dialog on right-click
+        "on-click" = "wofi --show drun"; # mouse-friendly app launcher
+        "on-click-right" = "wofi --show run";
       };
     }];
+    style = ''
+      #custom-menu { padding: 0 12px; font-size: 16px; }
+    '';
   };
 
-  # Launcher / terminal / notifications
-  programs.wofi.enable = true;         # Wayland app launcher
-  programs.kitty.enable = true;        # terminal
-  services.mako.enable = true;         # notify daemon
-
-  # Polkit agent (so auth prompts appear on Hyprland)
+  # Apps used by binds
+  programs.wofi.enable = true;
+  programs.ghostty.enable = true;
+  services.mako.enable = true;
   services.lxqt-policykit-agent.enable = true;
 
+  # (Optional) If you still want fuzzel, uncomment:
+  # programs.fuzzel.enable = true;
 }
