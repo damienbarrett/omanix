@@ -44,7 +44,6 @@
   programs.fuzzel.enable = true;            # simple Wayland launcher
   programs.kitty.enable = true;
 
-  home.packages = with pkgs; [ wl-clipboard grim slurp ];
 
   #Hyprland via HM (actual compositor config)
   wayland.windowManager.hyprland = {
