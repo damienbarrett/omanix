@@ -40,9 +40,10 @@
   ];
 
   # apps those binds call
-  programs.waybar.enable = true;
+  # programs.waybar.enable = true;
   programs.fuzzel.enable = true;            # simple Wayland launcher
   programs.kitty.enable = true;
+  programs.ghostty.enable = true;
 
 
   #Hyprland via HM (actual compositor config)
