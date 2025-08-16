@@ -125,11 +125,11 @@
 
   # Start-menu entry that launches Ghostty the same VM-safe way
   xdg.enable = true;
-  xdg.desktopEntries."ghostty-x11" = {
-    name = "Ghostty (X11 fallback)";
-    exec = "${pkgs.hyprland}/bin/hyprctl dispatch exec 'env -u WAYLAND_DISPLAY GDK_BACKEND=x11 GDK_GL=disable GSK_RENDERER=cairo ${pkgs.ghostty}/bin/ghostty'";
-    icon = "com.mitchellh.ghostty";
-    terminal = false;
-    categories = [ "System" "TerminalEmulator" ];
-  };
+  # xdg.desktopEntries."ghostty-x11" = {
+  #   name = "Ghostty (X11 fallback)";
+  #   exec = "${pkgs.hyprland}/bin/hyprctl dispatch exec 'env -u WAYLAND_DISPLAY GDK_BACKEND=x11 GDK_GL=disable GSK_RENDERER=cairo ${pkgs.ghostty}/bin/ghostty'";
+  #   icon = "com.mitchellh.ghostty";
+  #   terminal = false;
+  #   categories = [ "System" "TerminalEmulator" ];
+  # };
 }
