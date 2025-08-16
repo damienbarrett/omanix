@@ -124,7 +124,7 @@
     };
   };
 
-
+  hardware.graphics.enable = true;
 
   # XDG portals (screensharing, file pickers) for Hyprland
   xdg.portal = {
@@ -156,5 +156,10 @@
     nerd-fonts.jetbrains-mono
     # or: nerd-fonts.fira-code, nerd-fonts.droid-sans-mono, etc.
   ];
+  environment.variables = {
+    WLR_RENDERER_ALLOW_SOFTWARE = "1";  # wlroots: allow llvmpipe
+    XWAYLAND_NO_GLAMOR = "1";           # Xwayland: no glamor/GL
+    LIBGL_ALWAYS_SOFTWARE = "1";        # force software GL just in case
+  }
 }
 
