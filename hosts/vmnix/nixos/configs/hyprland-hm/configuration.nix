@@ -163,5 +163,22 @@
     XWAYLAND_NO_GLAMOR = "1";           # Xwayland: no glamor/GL
     LIBGL_ALWAYS_SOFTWARE = "1";        # force software GL just in case
   };
+
+  # System daemon (host/guest glue)
+  systemd.services.vmtoolsd = {
+    description = "VMware Tools Daemon";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "network.target" ];
+    serviceConfig.ExecStart = "${pkgs.open-vm-tools}/bin/vmtoolsd -b";
+  };
+
+  # Per-user helper (auto-resize, clipboard for X11/XWayland apps)
+  systemd.user.services.vmusr = {
+    description = "VMware Tools user agent";
+    wantedBy = [ "graphical-session.target" ];
+    partOf   = [ "graphical-session.target" ];
+    serviceConfig.ExecStart = "${pkgs.open-vm-tools}/bin/vmtoolsd -n vmusr";
+  };
+
 }
 
