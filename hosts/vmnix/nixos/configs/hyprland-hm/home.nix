@@ -6,25 +6,26 @@
   home.homeDirectory = "/home/nixos";
   home.stateVersion = "25.05";
 
-  # fonts for icons (Waybar, etc.)
+  # fonts (so Waybar icons render)
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
     # CLI basics
-    bash-completion bat btop curl eza fastfetch fd fzf git gh inetutils less jq
-    lazygit man nushell plocate ripgrep neovim tldr unzip whois yazi zoxide
+    bash-completion bat btop curl eza fastfetch fd fzf git gh inetutils jq
+    lazygit less man nushell plocate ripgrep neovim tldr unzip whois yazi zoxide
 
-    # Wayland/Hyprland helpers
+    # Wayland / Hyprland helpers
     wl-clipboard grim slurp swaybg xdg-utils
 
-    # terminals + Xwayland for X11 apps
-    foot xterm xwayland
+    # terminals
+    foot xterm
 
-    # icon fonts (optional but nice)
-    font-awesome nerd-fonts.symbols-only
+    # extra icon glyphs for Waybar menu icon etc.
+    # does the below overwrite the system font option?
+    # nerd-fonts.symbols-only
   ];
 
-  # Apps used by binds/desktop
+  # apps/services used in the session
   programs.wofi.enable = true;
   programs.ghostty.enable = true;
   services.mako.enable = true;
@@ -39,22 +40,22 @@
 
       exec-once = [
         "waybar"
-        "lxqt-policykit-agent"
-        "mako"
         "swaybg -i /run/current-system/sw/share/backgrounds/nixos/nix-wallpaper-simple-blue.png"
       ];
 
       bind = [
-        # Main terminal (Ghostty via X11 + non-GL renderer for VM stability)
-        "$mod, Return, exec, env -u GDK_DEBUG GDK_BACKEND=x11 GSK_RENDERER=cairo ghostty"
+        # Main terminal (stable in VMs: force X11 + cairo)
+        "$mod, Return, exec, env -u WAYLAND_DISPLAY GDK_BACKEND=x11 GDK_GL=disable GSK_RENDERER=cairo ${pkgs.ghostty}/bin/ghostty"
 
         # Backups
-        "$mod SHIFT, Return, exec, foot"
-        ", F12, exec, xterm"
-        ", F10, exec, wofi --show drun"
+        "$mod SHIFT, Return, exec, ${pkgs.foot}/bin/foot"
+        ", F12, exec, ${pkgs.xterm}/bin/xterm -geometry 100x30+40+40"
 
-        # Other handy binds
-        "$mod, D, exec, wofi --show drun"
+        # Launchers
+        "$mod, D, exec, ${pkgs.wofi}/bin/wofi --show drun"
+        ", F10, exec, ${pkgs.wofi}/bin/wofi --show drun"
+
+        # Window mgmt
         "$mod, Q, killactive,"
         "$mod SHIFT, E, exit,"
         "$mod, F, fullscreen,"
@@ -62,33 +63,72 @@
     };
   };
 
-  # Waybar with a clickable "Menu" button
+  # Waybar with a clickable "Menu" button (left side) + simple pill theme
   programs.waybar = {
     enable = true;
     settings = [{
       layer = "top";
       position = "top";
-      modules-left = [ "custom/menu" "hyprland/workspaces" ];
+      modules-left   = [ "custom/menu" "hyprland/workspaces" ];
       modules-center = [ "clock" ];
-      modules-right = [ "pulseaudio" "network" "cpu" "memory" "battery" ];
+      modules-right  = [ "pulseaudio" "network" "cpu" "memory" "battery" ];
 
       "custom/menu" = {
-        "format" = "Menu";               # swap to an icon later if you want
+        "format" = "Menu";                         # swap to an icon later (e.g. "")
         "tooltip" = false;
-        "on-click" = "wofi --show drun";
-        "on-click-right" = "wofi --show run";
+        "on-click" = "${pkgs.wofi}/bin/wofi --show drun";
+        "on-click-right" = "${pkgs.wofi}/bin/wofi --show run";
+      };
+
+      clock = { "format" = "{:%a %b %d  %H:%M}"; "tooltip" = false; };
+
+      pulseaudio = {
+        "format" = "{icon} {volume}%";
+        "format-muted" = "";
+        "format-icons" = { "headphones" = ""; "default" = [ "" "" "" ]; };
+        "tooltip" = true;
+      };
+
+      network = {
+        "format-wifi" = " {signalStrength}%";
+        "format-ethernet" = "󰈀 {ifname}";
+        "format-disconnected" = "󰖪";
+        "tooltip" = true;
+      };
+
+      cpu    = { "format" = " {usage}%"; "tooltip" = true; };
+      memory = { "format" = " {used:0.1f}GiB"; "tooltip" = true; };
+
+      battery = {
+        "format" = "{icon} {capacity}%";
+        "format-charging" = " {capacity}%";
+        "format-icons" = [ "" "" "" "" "" ];
+        "tooltip" = true;
       };
     }];
+
     style = ''
-      #custom-menu { padding: 0 12px; font-size: 16px; }
+      * { border: none; font-family: "JetBrainsMono Nerd Font", "FiraCode Nerd Font", monospace; font-size: 12.5px; color: #cdd6f4; }
+      window#waybar { background: rgba(18,20,28,0.85); border-bottom: 1px solid rgba(255,255,255,0.05); }
+      #custom-menu, #clock, #pulseaudio, #network, #cpu, #memory, #battery {
+        padding: 6px 10px; margin: 4px 6px; background: #1e1e2e; border-radius: 12px;
+      }
+      #custom-menu { font-weight: 600; }
+      #workspaces button { padding: 4px 10px; margin: 4px 4px; background: transparent; color: #a6adc8; border-radius: 10px; }
+      #workspaces button.active { background: #313244; color: #cdd6f4; }
+      #workspaces button:hover { background: #26283a; }
+      #pulseaudio.muted, #network.disconnected { opacity: .6; }
+      #battery.charging { background: #a6e3a1; color: #11111b; }
+      #battery.warning, #battery.critical { background: #f38ba8; color: #11111b; }
     '';
   };
 
-  # Optional launcher entry so Wofi shows an explicit X11 Ghostty
+  # Start-menu entry that launches Ghostty the same VM-safe way
   xdg.enable = true;
   xdg.desktopEntries."ghostty-x11" = {
     name = "Ghostty (X11 fallback)";
-    exec = "env -u GDK_DEBUG GDK_BACKEND=x11 GSK_RENDERER=cairo ghostty";
+    exec = "${pkgs.hyprland}/bin/hyprctl dispatch exec 'env -u WAYLAND_DISPLAY GDK_BACKEND=x11 GDK_GL=disable GSK_RENDERER=cairo ${pkgs.ghostty}/bin/ghostty'";
+    icon = "com.mitchellh.ghostty";
     terminal = false;
     categories = [ "System" "TerminalEmulator" ];
   };

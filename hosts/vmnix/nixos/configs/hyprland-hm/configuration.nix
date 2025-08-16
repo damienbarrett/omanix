@@ -153,7 +153,8 @@
   # Fonts so Waybar icons look right
   fonts.packages = with pkgs; [
     font-awesome
-    nerd-fonts.jetbrains-mono
+    # nerd-fonts.jetbrains-mono
+    nerd-fonts.monaspace
     # or: nerd-fonts.fira-code, nerd-fonts.droid-sans-mono, etc.
   ];
   environment.variables = {
