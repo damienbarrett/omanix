@@ -36,10 +36,15 @@
     # hyprland packages
     wl-clipboard grim slurp swaybg
     xdg-utils
+    foot xterm # backup
   ];
 
+  # apps those binds call
+  programs.waybar.enable = true;
+  programs.fuzzel.enable = true;            # simple Wayland launcher
+  programs.kitty.enable = true;
 
-
+  home.packages = with pkgs; [ wl-clipboard grim slurp ];
 
   #Hyprland via HM (actual compositor config)
   wayland.windowManager.hyprland = {
@@ -61,10 +66,13 @@
 
       bind = [
         "$mod, Return, exec, kitty"
+        # ", F12, exec, kitty"            # keep the no-mod fallback
         "$mod, D, exec, wofi --show drun"
         "$mod, Q, killactive,"
         "$mod SHIFT, E, exit,"
         "$mod, F, fullscreen,"
+        # "$mod, Return, exec, foot"
+        ", F12, exec, xterm"    # rescue fallback
       ];
     };
   };
@@ -79,6 +87,13 @@
       modules-left = [ "hyprland/workspaces" ];
       modules-center = [ "clock" ];
       modules-right = [ "pulseaudio" "network" "cpu" "memory" "battery" ];
+      # The "start button"
+      "custom/menu" = {
+        "format" = "";                 # any icon/text (needs a nerd/FA icon)
+        "tooltip" = false;
+        "on-click" = "wofi --show drun"; # app launcher (mouse friendly)
+        "on-click-right" = "wofi --show run"; # optional: "run" dialog on right-click
+      };
     }];
   };
 
