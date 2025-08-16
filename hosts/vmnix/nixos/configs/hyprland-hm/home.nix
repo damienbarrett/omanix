@@ -12,6 +12,7 @@
 
     wl-clipboard grim slurp swaybg xdg-utils
     foot xterm  # backup terms
+    xwayland
   ];
 
   # Hyprland via Home Manager
