@@ -110,7 +110,11 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.settings.download-buffer-size = 268435456; # increase buffer download size to 256MB. Default is 64 and caused issues.
   # Hyprland system integration (session file, polkit, xdp, xwayland, etc.)
-  programs.hyprland.enable = true;  # required system-level piece
+  # programs.hyprland.enable = true;  # required system-level piece
+  programs.hyperland = {
+    enable = true;
+	xwayland.enable = true;
+  }
 
   services.greetd = {
     enable = true;
