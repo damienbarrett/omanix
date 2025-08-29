@@ -28,6 +28,7 @@
   # apps/services used in the session
   programs.wofi.enable = true;
   programs.ghostty.enable = true;
+  programs.chromium.enable = true;
   services.mako.enable = true;
   services.lxqt-policykit-agent.enable = true;
 
