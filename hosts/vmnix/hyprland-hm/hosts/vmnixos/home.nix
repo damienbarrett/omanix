@@ -6,6 +6,11 @@
   home.homeDirectory = "/home/nixos";
   home.stateVersion = "25.05";
 
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
+
   # fonts (so Waybar icons render)
   fonts.fontconfig.enable = true;
 
