@@ -106,6 +106,8 @@
     WLR_RENDERER_ALLOW_SOFTWARE = "1";
     XWAYLAND_NO_GLAMOR = "1";
     LIBGL_ALWAYS_SOFTWARE = "1";
+    EDITOR = "nvim";
+    VISUAL = "nvim";
   };
 
   boot.kernelModules = [ "vmwgfx" ];
