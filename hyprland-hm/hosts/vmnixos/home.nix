@@ -17,7 +17,8 @@
   home.packages = with pkgs; [
     # CLI basics
     bash-completion bat btop curl eza fastfetch fd fzf git gh inetutils jq
-    lazygit less man nushell plocate ripgrep neovim tldr unzip whois yazi zoxide
+    lazygit less man nushell plocate ripgrep tldr unzip whois yazi zoxide
+    # neovim # TODO: have commented out while looking at nixvim
 
     # Wayland / Hyprland helpers
     wl-clipboard grim slurp swaybg xdg-utils
@@ -37,14 +38,39 @@
   services.mako.enable = true;
   services.lxqt-policykit-agent.enable = true;
 
+  programs.nixvim = {
+    enable = true;
+    plugins.oil = {
+      enable = true;
+      autoload = true;
+      settings = {
+        default_file_explorer = true;
+      };
+    };
+    keymaps = [
+      {
+        mode = "n";
+	key = "-";
+	action = "<CMD>Oil<CR>";
+	desc = "Open Oil";
+      }
+      {
+        mode = "n";
+	key = "g-";
+	action = "<CMD>Oil --float<CR>";
+	desc = "Open Oil (Float)";
+      }
+    ];
+  };
+
   # Hyprland via Home Manager
   wayland.windowManager.hyprland = {
     enable = true;
     settings = {
       "$mod" = "SUPER";
       # monitor = ",highres,auto,2"; # changed to highres from auto
-      monitor = ",highres,auto,3"; # changed to highres from auto
-      # monitor = ",2560x1600@59.99Hz,auto,2"; # changed to highres from auto
+      # monitor = ",highres,auto,3"; # changed to highres from auto
+      monitor = ",2560x1600@59.99Hz,auto,1.5"; # changed to highres from auto
 
       exec-once = [
         "waybar"
