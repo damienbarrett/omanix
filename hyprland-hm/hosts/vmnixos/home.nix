@@ -68,9 +68,9 @@
     enable = true;
     settings = {
       "$mod" = "SUPER";
-      # monitor = ",highres,auto,2"; # changed to highres from auto
+      monitor = ",highres,auto,2"; # changed to highres from auto
       # monitor = ",highres,auto,3"; # changed to highres from auto
-      monitor = ",2560x1600@59.99Hz,auto,1.5"; # changed to highres from auto
+      # monitor = ",2560x1600@59.99Hz,auto,1.5"; # changed to highres from auto
 
       exec-once = [
         "waybar"
