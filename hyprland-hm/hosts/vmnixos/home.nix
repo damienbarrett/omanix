@@ -42,7 +42,7 @@
     enable = true;
     plugins.oil = {
       enable = true;
-      autoload = true;
+      autoLoad = true;
       settings = {
         default_file_explorer = true;
       };
@@ -52,13 +52,13 @@
         mode = "n";
 	key = "-";
 	action = "<CMD>Oil<CR>";
-	desc = "Open Oil";
+	options.desc = "Open Oil";
       }
       {
         mode = "n";
 	key = "g-";
 	action = "<CMD>Oil --float<CR>";
-	desc = "Open Oil (Float)";
+	options.desc = "Open Oil (Float)";
       }
     ];
   };
