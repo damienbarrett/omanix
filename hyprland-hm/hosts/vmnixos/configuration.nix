@@ -83,7 +83,7 @@
     ];
     config = {
       common.default = [ "gtk" ];
-      hyprland.default = [ "gtk" "hyprland" ];
+      hyprland.default = [ "hyprland" "gtk" ];
     };
   };
 
@@ -103,14 +103,15 @@
 
   # VMware + wlroots env vars for 
   environment.variables = {
-    WLR_RENDERER_ALLOW_SOFTWARE = "1";
-    XWAYLAND_NO_GLAMOR = "1";
-    LIBGL_ALWAYS_SOFTWARE = "1";
+    # WLR_RENDERER_ALLOW_SOFTWARE = "1";
+    # XWAYLAND_NO_GLAMOR = "1";
+    # LIBGL_ALWAYS_SOFTWARE = "1";
     EDITOR = "nvim";
     VISUAL = "nvim";
   };
 
-  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+  environment.sessionVariables.NIXOS_OZONE_WL = "1"; # wayland/ozone scaling for chromium and electron apps
+  environment.sessionVariables.XCURSOR_SIZE = "48";  # ensures cursor is an appropriate size when using scaling for the resolution (e.g. 2x)
 
   boot.kernelModules = [ "vmwgfx" ];
   services.xserver.videoDrivers = [ "vmware" "modesetting" ];
