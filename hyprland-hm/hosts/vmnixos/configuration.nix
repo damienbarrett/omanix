@@ -110,6 +110,8 @@
     VISUAL = "nvim";
   };
 
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
   boot.kernelModules = [ "vmwgfx" ];
   services.xserver.videoDrivers = [ "vmware" "modesetting" ];
 
